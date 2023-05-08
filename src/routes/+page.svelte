@@ -1,28 +1,40 @@
 <script>
     import "@picocss/pico";
-    let newTasks = ['1']
+    let newTasks = []
     let completedTasks = []
     let task = ''
 
     function addTask(){
-        newTasks.push(task)
-        newTasks = newTasks        
+        const tasks = [...newTasks]
+
+        tasks.push(task)
+        newTasks = tasks
+
         task = ''
     }
 
-    function setComplet(index){
-        completedTasks.push(newTasks[index])
-        completedTasks = completedTasks
-        newTasks.splice(index, 1)
-        newTasks = newTasks
+    function setComplete(index){
+        const completed = [...completedTasks]
+        const tasks = [...newTasks]
+
+        completed.push(newTasks[index])
+        tasks.splice(index, 1)
+
+        newTasks = tasks
+        completedTasks = completed
     }
 
     function revert(index){
-        newTasks.push(completedTasks[index])
-        newTasks = newTasks
-        completedTasks.splice(index, 1)
-        completedTasks = completedTasks
+        const completed = [...completedTasks]
+        const tasks = [...newTasks]
+
+        tasks.push(completedTasks[index])
+        completed.splice(index, 1)
+
+        newTasks = tasks
+        completedTasks = completed
     }
+    
 </script>
 <input type="text" bind:value={task}>
 <button on:click={addTask}>click</button>
@@ -31,7 +43,7 @@
         <h3>newTask</h3>
         {#each newTasks as lol,i (lol)}
         <div>
-            <input type="checkbox" key={i} on:click={() => setComplet(i)} />
+            <input type="checkbox" key={i} on:click={() => setComplete(i)} />
             <label>{lol}</label>
         </div>
         {/each}
